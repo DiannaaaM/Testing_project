@@ -6,3 +6,9 @@ class User:
 
     def __str__(self):
         return self.full_name
+
+    def ret_first_name(self):
+        return self.first_name
+
+    def ret_last_name(self):
+        return self.last_name
