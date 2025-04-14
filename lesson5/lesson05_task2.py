@@ -13,3 +13,17 @@ for _ in range(2):
     driver.get('http://uitestingplayground.com/dynamicid')
     driver.find_element_by_id('btn').click()
     driver.quit()
+
+driver = webdriver.Firefox()
+
+driver.get('http://uitestingplayground.com/dynamicid')
+
+driver.find_element_by_id('btn').click()
+
+driver.quit()
+
+for _ in range(2):
+    driver = webdriver.Chrome()
+    driver.get('http://uitestingplayground.com/dynamicid')
+    driver.find_element_by_id('btn').click()
+    driver.quit()
