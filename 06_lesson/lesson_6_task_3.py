@@ -1,3 +1,5 @@
+import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,6 +13,7 @@ try:
     images = WebDriverWait(driver, 20).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "img"))
     )
+    time.sleep(15)
 
     if len(images) >= 3:
         src_value = images[2].get_attribute("src")
