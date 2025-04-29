@@ -39,10 +39,12 @@ driver.find_element(By.TAG_NAME, 'button').click()
 
 alert py-2 alert-success'''
 
+
 def test_zip_field():
     # Проверка подсветки поля Zip code
     pole_z = driver.find_element(By.ID, "zip-code").get_attribute("class")
     assert pole_z == "alert py-2 alert-danger"
+
 
 def test_full_fields():
     # Проверка подсветки остальных полей
