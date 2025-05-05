@@ -5,7 +5,6 @@ import pytest
 def connecting_db():
     engine = create_engine("postgresql://postgres:493138@localhost:5432/Testing")
     with engine.connect() as conn:
-        # Создаем таблицу, если не существует
         conn.execute(text("""
         CREATE TABLE IF NOT EXISTS fruits (
             id SERIAL PRIMARY KEY,
