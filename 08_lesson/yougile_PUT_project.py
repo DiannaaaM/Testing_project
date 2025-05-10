@@ -23,7 +23,6 @@ def test_PUT_request():
     assert response.status_code == 200
 
 
-
 @pytest.mark.xfail(reason='Намеренный провал')
 def test_PUT_request_fail():
     id = 'c6011640-857f-4209-a2ab-af21d95fd30c'

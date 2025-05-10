@@ -1,6 +1,7 @@
 import requests
 import pytest
 
+
 @pytest.mark.positive
 def test_POST_request():
     url = 'https://ru.yougile.com/api-v2/projects'
