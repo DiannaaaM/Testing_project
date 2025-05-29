@@ -1,76 +1,93 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium import webdriver
 from time import sleep
 
+class LoginPage:
+    def __init__(self, driver):
+        self.driver = driver
 
-class PageObject:
+    def enter_username(self, username):
+        username_field = self.driver.find_element(By.ID, 'user-name')
+        username_field.send_keys(username)
 
-    def open_site(self, driver, link):
-        driver.get(link)
+    def enter_password(self, password):
+        password_field = self.driver.find_element(By.ID, 'password')
+        password_field.send_keys(password)
 
-    def add_login(self, driver):
-        return self.search_element(driver, 'id', 'user-name')
+    def click_login(self):
+        login_button = self.driver.find_element(By.NAME, 'login-button')
+        login_button.click()
 
-    def add_password(self, driver):
-        return self.search_element(driver, 'id', 'password')
 
-    def click_to_button(self, btn):
-        btn.click()
-    def eight_num(self, driver):
-        return self.search_element(driver, By.XPATH, "//span[text()='8']")
+class ProductPage:
+    def __init__(self, driver):
+        self.driver = driver
 
-    def add_to_buscket(self, driver, by, name):
-        return self.search_element(driver, by, name).click()
+    def add_to_cart(self, product_id):
+        add_to_cart_button = self.driver.find_element(By.ID, product_id)
+        add_to_cart_button.click()
 
-    def search_element(self, driver, by, value):
-        return driver.find_element(by, value)
+    def go_to_cart(self):
+        cart_button = self.driver.find_element(By.ID, 'shopping_cart_container')
+        cart_button.click()
 
-    def send_keys(self, element, data):
-        element.send_keys(str(data))
 
-    def click_to_element(self, element):
-        element.click()
+class CheckoutPage:
+    def __init__(self, driver):
+        self.driver = driver
 
-    def text_data(self, element):
-        return element.text
+    def enter_first_name(self, first_name):
+        first_name_field = self.driver.find_element(By.ID, 'first-name')
+        first_name_field.send_keys(first_name)
+
+    def enter_last_name(self, last_name):
+        last_name_field = self.driver.find_element(By.ID, 'last-name')
+        last_name_field.send_keys(last_name)
+
+    def enter_postal_code(self, postal_code):
+        postal_code_field = self.driver.find_element(By.ID, 'postal-code')
+        postal_code_field.send_keys(postal_code)
+
+    def click_continue(self):
+        continue_button = self.driver.find_element(By.ID, 'continue')
+        continue_button.click()
+
+    def get_total(self):
+        total_label = self.driver.find_element(By.CLASS_NAME, 'summary_total_label')
+        return total_label.text
+
 
 
 def test_calculator():
     driver = webdriver.Chrome()
-    page = PageObject()
+    driver.get('https://www.saucedemo.com/')
 
-    page.open_site(driver, ' https://www.saucedemo.com/')
-
-    sleep(1)
-
-    page.send_keys(page.search_element(driver, 'id', 'user-name'), 'standard_user')
-    page.send_keys(page.search_element(driver, 'id', 'password'), 'secret_sauce')
-    page.click_to_button(page.search_element(driver, 'name', 'login-button'))
+    login_page = LoginPage(driver)
+    login_page.enter_username('standard_user')
+    login_page.enter_password('secret_sauce')
+    login_page.click_login()
 
     sleep(2)
 
-    page.add_to_buscket(driver, 'id', 'add-to-cart-sauce-labs-backpack')
-    page.add_to_buscket(driver, 'id', 'add-to-cart-sauce-labs-bolt-t-shirt')
-    page.add_to_buscket(driver, 'id', 'add-to-cart-sauce-labs-onesie')
-    page.click_to_button(page.search_element(driver, 'id', 'shopping_cart_container'))
+    product_page = ProductPage(driver)
+    product_page.add_to_cart('add-to-cart-sauce-labs-backpack')
+    product_page.add_to_cart('add-to-cart-sauce-labs-bolt-t-shirt')
+    product_page.add_to_cart('add-to-cart-sauce-labs-onesie')
+    product_page.go_to_cart()
 
     sleep(2)
 
-    page.click_to_button(page.search_element(driver, By.XPATH, "//button[text()='Checkout']"))
-
-    sleep(1)
-
-    page.send_keys(page.search_element(driver, 'id', 'first-name'), 'Diana')
-    page.send_keys(page.search_element(driver, 'id', 'last-name'), 'Murlaeva')
-    page.send_keys(page.search_element(driver, 'id', 'postal-code'), '427018')
-    page.click_to_button(page.search_element(driver, 'id', 'continue'))
+    checkout_page = CheckoutPage(driver)
+    checkout_page.enter_first_name('Diana')
+    checkout_page.enter_last_name('Murlaeva')
+    checkout_page.enter_postal_code('427018')
+    checkout_page.click_continue()
 
     sleep(2)
 
-    result = page.text_data(page.search_element(driver, 'class name', 'summary_total_label'))
+    result = checkout_page.get_total()
     assert result == 'Total: $58.29'
     driver.quit()
-
 
 if __name__ == "__main__":
     test_calculator()
