@@ -7,15 +7,15 @@ driver = webdriver.Chrome()
 
 try:
     driver.get("http://uitestingplayground.com/textinput")
+    
+    # Ждем загрузки страницы
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.TAG_NAME, "body"))
+    )
 
-    try:
-        input_field = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, "newButtonName"))
-        )
-    except Exception as e:
-        print("Не удалось найти поле ввода:", e)
-        driver.save_screenshot("error_screenshot.png")
-        raise
+    input_field = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, "newButtonName"))
+    )
 
     input_field.clear()
     input_field.send_keys("SkyPro")
@@ -25,12 +25,17 @@ try:
     )
     button.click()
 
-    WebDriverWait(driver, 5).until(lambda d: button.text == "SkyPro")
-
-    print(f"Кнопка изменила текст на: {button.text}")
+    # Явная проверка текста кнопки
+    expected_text = "SkyPro"
+    WebDriverWait(driver, 5).until(lambda d: button.text == expected_text)
+    assert button.text == expected_text, f"Ожидался текст '{expected_text}', получен '{button.text}'"
+    
+    print(f"Тест успешно пройден: кнопка изменила текст на '{button.text}'")
 
 except Exception as e:
     print("Произошла ошибка:", e)
+    driver.save_screenshot("error_screenshot.png")
+    raise
 
 finally:
     driver.quit()
